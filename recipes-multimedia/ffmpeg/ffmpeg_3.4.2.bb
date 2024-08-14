@@ -114,7 +114,7 @@ EXTRA_OECONF = " \
     --pkg-config=pkg-config \
 "
 
-EXTRA_OECONF_append_linux-gnux32 = " --disable-asm"
+EXTRA_OECONF:append:linux-gnux32 = " --disable-asm"
 
 do_configure() {
     ${S}/configure ${EXTRA_OECONF}

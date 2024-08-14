@@ -1,7 +1,6 @@
 SUMMARY = "Kodi Media Center"
 
 LICENSE = "GPLv2"
-#LIC_FILES_CHKSUM = "file://LICENSE.GPL;md5=930e2a5f63425d8dd72dbd7391c43c46"
 LIC_FILES_CHKSUM = "file://../../../../LICENSE.GPL;md5=930e2a5f63425d8dd72dbd7391c43c46"
 
 FILESPATH =. "${FILE_DIRNAME}/kodi-18:"
@@ -22,17 +21,16 @@ PV = "18.0+gitr${SRCPV}"
 SRC_URI = "git://github.com/xbmc/xbmc.git;branch=master \
           "
 
-inherit cmake gettext python-dir pythonnative
+inherit cmake gettext
 
 S = "${WORKDIR}/git/tools/depends/native/TexturePacker"
 
-OECMAKE_CXX_FLAGS_append = " -DTARGET_POSIX -std=gnu++11 -I${WORKDIR}/git/xbmc/linux"
+OECMAKE_CXX_FLAGS:append = " -DTARGET_POSIX -std=gnu++11 -I${WORKDIR}/git/xbmc/linux"
 
-do_configure_prepend() {
+do_configure:prepend() {
     ln -sf ${WORKDIR}/git/xbmc ${WORKDIR}/git/tools/depends/native/TexturePacker/
 }
 
-#OECMAKE_SOURCEPATH = "${S}"
 
 EXTRA_OECMAKE = "-DCMAKE_MODULE_PATH=${WORKDIR}/git/cmake/modules"
 

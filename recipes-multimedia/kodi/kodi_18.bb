@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=7b423f1c9388eae123332e372451a4f7"
 
 FILESPATH =. "${FILE_DIRNAME}/kodi-18:"
 
-inherit cmake gettext python-dir pythonnative systemd
+inherit cmake gettext systemd
 
 DEPENDS += " \
             libfmt \
@@ -131,10 +131,10 @@ PACKAGECONFIG[pulseaudio] = "-DENABLE_PULSEAUDIO=ON,-DENABLE_PULSEAUDIO=OFF,puls
 PACKAGECONFIG[lcms] = ",,lcms"
 
 LDFLAGS += "${TOOLCHAIN_OPTIONS}"
-LDFLAGS_append_mips = " -latomic"
-LDFLAGS_append_mipsel = " -latomic"
-LDFLAGS_append_mips64 = " -latomic"
-LDFLAGS_append_mips64el = " -latomic"
+LDFLAGS:append:mips = " -latomic"
+LDFLAGS:append:mipsel = " -latomic"
+LDFLAGS:append:mips64 = " -latomic"
+LDFLAGS:append:mips64el = " -latomic"
 
 KODI_ARCH = ""
 KODI_ARCH_mips = "-DWITH_ARCH=${TARGET_ARCH}"
@@ -185,7 +185,7 @@ export PYTHON_DIR
 
 export TARGET_PREFIX
 
-do_configure_prepend() {
+do_configure:prepend() {
 	# Ensure 'nm' can find the lto plugins 
 	liblto=$(find ${STAGING_DIR_NATIVE} -name "liblto_plugin.so.0.0.0")
 	mkdir -p ${STAGING_LIBDIR_NATIVE}/bfd-plugins
@@ -194,7 +194,7 @@ do_configure_prepend() {
 	sed -i -e 's:CMAKE_NM}:}${TARGET_PREFIX}gcc-nm:' ${S}/xbmc/cores/DllLoader/exports/CMakeLists.txt
 }
 
-do_install_append() {
+do_install:append() {
 	install -d ${D}/lib/systemd/system
 
 	if [ -e ${D}${libdir}/kodi/kodi-gbm ] ; then
@@ -215,7 +215,7 @@ FILES_${PN}-dbg += "${libdir}/kodi/.debug ${libdir}/kodi/*/.debug ${libdir}/kodi
 
 # kodi uses some kind of dlopen() method for libcec so we need to add it manually
 # OpenGL builds need glxinfo, that's in mesa-demos
-RRECOMMENDS_${PN}_append = " libcec \
+RRECOMMENDS_${PN}:append = " libcec \
                              libcurl \
                              libnfs \
                              ${@bb.utils.contains('PACKAGECONFIG', 'x11', 'xdyinfo xrandr xinit mesa-demos', '', d)} \
@@ -243,7 +243,7 @@ RRECOMMENDS_${PN}_append = " libcec \
                              tzdata-pacific \
                              xkeyboard-config \
                            "
-RRECOMMENDS_${PN}_append_libc-glibc = " glibc-charmap-ibm850 \
+RRECOMMENDS_${PN}:append:libc-glibc = " glibc-charmap-ibm850 \
                                         glibc-gconv-ibm850 \
                                         glibc-charmap-ibm437 \
                                         glibc-gconv-ibm437 \

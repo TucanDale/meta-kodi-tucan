@@ -5,19 +5,19 @@ PROVIDES += "libegl"
 PACKAGECONFIG_x86 = " osmesa opengl dri3 xa r600 gallium gallium-llvm "
 PACKAGECONFIG_x86-64 = " osmesa opengl dri3 xa r600 gallium gallium-llvm "
 
-PACKAGECONFIG_append = " gbm egl gles dri \
+PACKAGECONFIG:append = " gbm egl gles dri \
                 ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11', '', d)}\
                 ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland', '', d)}\
                 " 
 
 
-GALLIUMDRIVERS_append_armv7a = ",freedreno"
-GALLIUMDRIVERS_append_aarch64 = ",freedreno"
+GALLIUMDRIVERS:append:armv7a = ",freedreno"
+GALLIUMDRIVERS:append:aarch64 = ",freedreno"
 
-PACKAGECONFIG_append_armv7a = " gallium \
+PACKAGECONFIG:append:armv7a = " gallium \
                          ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xa', '', d)} \
                        "
-PACKAGECONFIG_append_aarch64 = " gallium \
+PACKAGECONFIG:append:aarch64 = " gallium \
                          ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xa', '', d)} \
                        "
 
